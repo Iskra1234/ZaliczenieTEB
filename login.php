@@ -35,16 +35,27 @@ if (isset($_SESSION['logged']['email'])) {
     if (isset($_GET['register']) || isset($_GET['logout'])) {
       echo <<<ERROR
         <div class="card bg-success">
-          <div class="card-header">
+          <div class="card-header cento">
+          <div class="row">
+          <div class="col-10">
     ERROR;
+
             if (isset($_GET['register'])) {
-              echo '<h3 class="card-title">Prawidłowo dodano użytkownika</h3>';
+
+              echo '<h3 class="card-title">Rejestracja przebiegła pomyślnie.<br> Sprawdź maila! </h3>';
             }
             else if($_GET['logout']){
-              echo '<h3 class="card-title">Prawidłowo wylogowano użytkownika</h3>';
+              echo '<h3 class="card-title">Wylogowano. Do zobaczenia w którtce!</h3>';
+            }else if($_GET['active']){
+              echo '<h3 class="card-title">Konto zostało aktywowane! Zaloguj się :D</h3>';
             }
 
       echo <<<ERROR
+            </div>
+            <div class="col-2">
+            <ion-icon name="checkmark-outline"></ion-icon>
+            </div>
+            </div>
           </div>
        </div>
     ERROR;
@@ -67,7 +78,7 @@ if (isset($_SESSION['logged']['email'])) {
     <div class="card-body login-card-body">
       <p class="login-box-msg">Zaloguj się</p>
 
-      <form action="./Scripts/login.php" method="post">
+      <form action="pages/scripts/login.php" method="post">
         <div class="input-group mb-3">
           <input type="email" class="form-control" placeholder="Email" name="email">
           <div class="input-group-append">
@@ -130,5 +141,6 @@ if (isset($_SESSION['logged']['email'])) {
 <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
 <script src="dist/js/adminlte.min.js"></script>
+<script src="https://unpkg.com/ionicons@5.0.0/dist/ionicons.js"></script>
 </body>
 </html>

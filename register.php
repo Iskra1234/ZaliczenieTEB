@@ -26,11 +26,23 @@ session_start();
 </head>
 <body class="hold-transition register-page bg1">
 <div class="register-box">
+  <?php
+      if(isset($_SESSION['error'])){
+        echo <<<ERROR
+        <div class="card bg-danger">
+          <div class="card-header">
+            <h3 class="card-title">$_SESSION[error]</h3>
+          </div>
+        </div>
+  ERROR;
+        unset($_SESSION['error']);
+      }
+  ?>
   <div class="card">
     <div class="card-body register-card-body">
       <p class="login-box-msg">Zarejestruj się</p>
 
-      <form action="register.php" method="post">
+      <form action="pages/scripts/register.php" method="post">
         <div class="input-group mb-3">
           <input type="text" class="form-control" placeholder="Imie" name="name">
           <div class="input-group-append">
@@ -108,7 +120,7 @@ session_start();
         </a>
       </div>
 
-      <a href="login.html" class="text-center">Mam konto i chcę się zalogować</a>
+      <a href="login.php" class="text-center">Mam konto i chcę się zalogować</a>
     </div>
     <!-- /.form-box -->
   </div><!-- /.card -->
