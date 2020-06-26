@@ -1,10 +1,8 @@
 <?php
 session_start();
 
-
-
 if (!isset($_SESSION['logged']['email'])) {
-   header('location: ../../login.php');
+   header('location: ../../index.php');
      exit();
  }
 ?>
@@ -36,6 +34,8 @@ if (!isset($_SESSION['logged']['email'])) {
   <link rel="stylesheet" href="../../plugins/daterangepicker/daterangepicker.css">
   <!-- summernote -->
   <link rel="stylesheet" href="../../plugins/summernote/summernote-bs4.css">
+  <link rel="stylesheet" href="../../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="../../plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 </head>
@@ -195,6 +195,11 @@ if (!isset($_SESSION['logged']['email'])) {
               <i class="fas fa-th-large"></i>
             </a>
           </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link" href="../scripts/logout.php">
+              <i class="fas fa-sign-out-alt" style="font-size: 18px;"></i>
+              </a>
+          </li>
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
@@ -228,10 +233,13 @@ if (!isset($_SESSION['logged']['email'])) {
         <!-- Small boxes (Stat box) -->
 
         <div class="row">
-          <div class="col-6">
+          <div class="col-4">
             <div class="card">
-              <div class="card-header">
-                <h3 class="card-title">Ostatnio utworzeni</h3>
+                <div class="card card-warning">
+                  <div class="card-header">
+                      <h3 class="card-title">Ostatnio utworzeni</h3>
+                    <div id="dom-target" style="display: none;">
+                    </div>
 
                 <div class="card-tools">
                   <button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -242,7 +250,7 @@ if (!isset($_SESSION['logged']['email'])) {
                   </button>
                 </div>
               </div>
-              <!-- /.card-header -->
+              </div>
               <div class="card-body p-0">
                 <ul class="products-list product-list-in-card pl-2 pr-2">
                   <?php
@@ -278,16 +286,15 @@ USER;
 
                 </ul>
               </div>
-
             </div>
-            <!-- /.card -->
           </div>
-
-          <div class="col-6">
+          <div class="col-4">
             <div class="card">
+                <div class="card card-orange">
               <div class="card-header">
                 <h3 class="card-title">Ostatnio zalogowani</h3>
-
+                <div id="dom-target" style="display: none;">
+                </div>
                 <div class="card-tools">
                   <button type="button" class="btn btn-tool" data-card-widget="collapse">
                     <i class="fas fa-minus"></i>
@@ -297,6 +304,7 @@ USER;
                   </button>
                 </div>
               </div>
+            </div>
               <!-- /.card-header -->
               <div class="card-body p-0">
                 <ul class="products-list product-list-in-card pl-2 pr-2">
@@ -339,14 +347,11 @@ USER;
 
             </div>
             <!-- /.card -->
-          </div>
 
-
-        </div>
-        <div class="row">
+            <!-- DONUT -->
           <div class="col-4">
 
-            <div class="card card-danger">
+            <div class="card card-warning">
               <div class="card-header">
                 <h3 class="card-title">Aktywni/Nieaktywni</h3>
                 <div id="dom-target" style="display: none;">
@@ -355,17 +360,16 @@ USER;
                         $result = $conn->query($sql);
                         while ($row = $result->fetch_assoc()) {
                                 if ($row['active'] == 0) {
-                                  echo <<<DIV
-                                  <div hidden id="inactive">
-                                {$row['num']}
-                                </div>
-DIV;
+
+                                  echo "<div hidden id='inactive'>";
+                                echo htmlentities($row['num']);
+                              echo  "</div>";
+
                               }else if($row['active'] == 1) {
-                                echo <<<DIV
-                                 <div hidden id = "active">
-                                {$row['num']}
-                                </div>
-DIV;
+                              echo "<div hidden id='active'>";
+                              echo htmlentities($row['num']);
+                            echo  "</div>";
+
                                 }
                               }
 
@@ -381,133 +385,134 @@ DIV;
               <div class="card-body">
                 <canvas id="donutChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
               </div>
-              <!-- /.card-body -->
+
             </div>
-            <!-- /.card -->
-        </div>
+  </div>
+          </div>
+
+        <div class="row">
+
 
         <div class="col-8">
-            <div class="card">
+              <div class="card card-orange">
               <div class="card-header">
-                <h3 class="card-title">Spis użytkowników</h3>
-
-                <div class="card-tools">
-                  <div class="input-group input-group-sm" style="width: 150px;">
-                    <input type="search" class="form-control form-control-sm" placeholder="szukaj*" aria-controls="test">
-
-                    <div class="input-group-append">
-                      <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
-                    </div>
+                <h3 class="card-title">Lista użytkowników</h3>
+                <div id="dom-target" style="display: none;">
+                </div>
+                  <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
                   </div>
                 </div>
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body table-responsive p-0" style="height: 300px;">
-                <table id="test" class="table table-head-fixed text-nowrap">
-                  <thead>
-                    <tr>
-                      <th>Imie</th>
-                      <th>Nazwisko</th>
-                      <th>Status</th>
-                      <th>Typ</th>
-                      <th>Ostatnie logowanie</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <?php
-        require_once '../scripts/connect.php';
+                <!-- /.card-header -->
+                <div class="card-body table-responsive p-0" style="height: 300px;">
+                  <table id="test" class="table table-head-fixed text-nowrap">
+                    <thead>
+                      <tr>
+                        <th>Imie</th>
+                        <th>Nazwisko</th>
+                        <th>Status</th>
+                        <th>Typ</th>
+                        <th>Ostatnie logowanie</th>
+                      </tr>
+                    </thead>
+                    <tbody>
 
-        $sql = "SELECT name, surname, active, last_login, permission FROM `user` as u INNER JOIN `permission` as p ON u.permissionid=p.id ORDER BY permissionid";
+              <?php
+                        require_once '../scripts/connect.php';
 
-        $result = $conn->query($sql);
+                        $sql = "SELECT name, surname, active, last_login, permission FROM `user` as u INNER JOIN `permission` as p ON u.permissionid=p.id ORDER BY permissionid";
 
-        if ($result->num_rows != 0) {
-          while($user = $result->fetch_assoc()){
-            echo <<<USER
-              <tr>
-                <td>
-                  $user[name]
-                </td>
-                <td>
-                  $user[surname]
-                </td>
+                        $result = $conn->query($sql);
 
-                <td>
-USER;
-            switch ($user['permission']) {
-              case 'admin':
-                echo '<span class="badge badge-info">';
-              break;
+                        if ($result->num_rows != 0) {
+                          while($user = $result->fetch_assoc()){
+                            echo <<<USER
+                              <tr>
+                                <td>
+                                  $user[name]
+                                </td>
+                                <td>
+                                  $user[surname]
+                                </td>
+                                <td>
+  USER;
+                              switch ($user['permission']) {
+                                case 'admin':
+                                  echo '<span class="badge badge-info">';
+                                break;
 
-              case 'user':
-                echo '<span class="badge badge-success">';
-                break;
+                                case 'user':
+                                  echo '<span class="badge badge-success">';
+                                  break;
 
-              case 'moderator':
-                echo '<span class="badge badge-warning">';
-                break;
-            }
+                                case 'moderator':
+                                  echo '<span class="badge badge-warning">';
+                                  break;
+                              }
 
-            echo <<<USER
-                    $user[permission]
-                  </span>
-                </td>
+                              echo <<<USER
+                                      $user[permission]
+                                    </span>
+                                  </td>
+                                  <td>
+  USER;
+                              switch ($user['active']) {
+                                case '0':
+                                  echo '<span class="badge badge-danger">';
+                                  $active = 'zablokowany';
+                                break;
 
-                <td>
-USER;
-            switch ($user['active']) {
-              case '0':
-                echo '<span class="badge badge-danger">';
-                $active = 'zablokowany';
-              break;
+                                case '1':
+                                  echo '<span class="badge badge-success">';
+                                  $active = 'aktywny';
+                                  break;
 
-              case '1':
-                echo '<span class="badge badge-success">';
-                $active = 'aktywny';
-                break;
+                              }
 
-            }
-
-            echo <<<USER
-                    $active
-                  </span>
-                </td>
-
-
-                <td>
-                  <div class="sparkbar" data-color="#00a65adata-height="20">
-USER;
-            if ($user['last_login'] == NULL) {
-              echo 'Brak logowania';
-            }else{
-              echo $user['last_login'];
-            }
-            echo <<<USER
-
-                  </div>
-                </td>
-              </tr>
-USER;
+                              echo <<<USER
+                                      $active
+                                    </span>
+                                  </td>
+                                  <td>
+                                    <div class="sparkbar" data-color="#00a65adata-height="20">
+  USER;
+                                if ($user['last_login'] == NULL) {
+                                  echo 'Brak logowania';
+                                }else{
+                                  echo $user['last_login'];
+                                }
+                                echo <<<USER
+                                      </div>
+                                    </td>
+                                  </tr>
+  USER;
+                                  }
+                                }else{
+                                  echo <<<EMPTYROW
+                                  <tr>
+                                    <td colspan="2">Brak użytkowników w bazie danych</td>
+                                  </tr>
+  EMPTYROW;
           }
-        }else{
-          echo <<<EMPTYROW
-          <tr>
-            <td colspan="2">Brak użytkowników w bazie danych</td>
-          </tr>
-EMPTYROW;
-        }
+
       ?>
-
-                  </tbody>
-                </table>
-              </div>
-              <!-- /.card-body -->
+                    </tbody>
+                  </table>
+                </div>
             </div>
+          </div>
 
 
-              <!-- Bar chart -->
-              <div class="card card-primary card-outline">
+            <!--słupki-->
+              <div class="col-4">
+              <div class="card card-outline">
+                <div class="card card-warning">
                 <div class="card-header">
+                  <h3 class="card-title">Bilans władzy</h3>
+                  <div id="dom-target" style="display: none;">
+                  </div>
                   <?php
                   $sql = $sql = "SELECT permission, count(*) as 'num' FROM `user` as u INNER JOIN `permission` as p ON u.permissionid=p.id GROUP BY `permissionid` ORDER BY p.id";
                   $result = $conn->query($sql);
@@ -529,9 +534,7 @@ EMPTYROW;
 DIV;
 
                    ?>
-                  <h3 class="card-title">
-                    Bilans władzy
-                  </h3>
+
 
                   <div class="card-tools">
                     <button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -542,16 +545,16 @@ DIV;
                     </button>
                   </div>
                 </div>
+              </div>
                 <div class="card-body">
                   <div id="bar-chart" style="height: 300px;"></div>
                 </div>
                 <!-- /.card-body-->
-              </div>
-
+            </div>
+          </div>
         </div>
-        </div>
+</div>
     </section>
-  </div>
 
   <!-- /.content-wrapper -->
   <footer class="main-footer">
@@ -568,8 +571,8 @@ DIV;
   </aside>
   <!-- /.control-sidebar -->
 </div>
-<!-- ./wrapper -->
 
+<script src="https://unpkg.com/ionicons@5.0.0/dist/ionicons.js"></script>
 <!-- jQuery -->
 <script src="../../plugins/jquery/jquery.min.js"></script>
 <!-- jQuery UI 1.11.4 -->
@@ -629,7 +632,7 @@ DIV;
       datasets: [
         {
           data: [active,inactive],
-          backgroundColor : ['#f56954', '#00a65a'],
+          backgroundColor : ['#34c404', '#8f8c8d'],
         }
       ]
     }
@@ -670,7 +673,7 @@ DIV;
                 show: true, barWidth: 0.7, align: 'center',
               },
             },
-            colors: ['#3c8dbc'],
+            colors: ['#007bff','#ffc107','#28a745'],
             xaxis : {
               ticks: [[1,'Admini'], [2,'Moderatorzy'], [3,'Użytkownicy']]
             }
@@ -680,12 +683,7 @@ DIV;
 
 
   $.widget.bridge('uibutton', $.ui.button)
-  $('#test').dataTable({
-    "pagging": false,
-    "ordeing": false,
-    "info": false,
-    "lenghtChange": false
-  });
+
 });
 
 </script>

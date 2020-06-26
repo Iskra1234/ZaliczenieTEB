@@ -7,7 +7,7 @@
       $_SESSION['error'] = 'Błąd połączenia z bazą danych';
       header('location: ../../register.php');
     }else{
-      //prawidłowe połączenie z bazą danych i wypełniono wszystkie pola
+
       if ($_POST['email1'] != $_POST['email2']) {
         $_SESSION['error'] = 'Podane adresy email się różnią.';
         header('location: ../../register.php');
@@ -26,9 +26,8 @@
       $email1 = $_POST['email1'];
       $password1 = $_POST['password1'];
 
-      $permission = 2;
+      $permission = 3;
 
-      //szyfrowanie hasła za pomocą ARGON2ID
       $password = password_hash($password1, PASSWORD_ARGON2ID);
 
 
@@ -49,7 +48,7 @@
         http://localhost/adminlte/pages/scripts/activate.php?aid={$email1}&hash={$hash}
 MAIL;
         mail($email1, 'Hello There!', $MAIL, 'From: inga.cerba@gmail.com');
-        header("location: ../../login.php?register=success");
+        header("location: ../../index.php?register=success");
         exit();
       }else{
         $_SESSION['error'] = 'Nie udało się dodać nowego użytkownika!';
@@ -58,9 +57,6 @@ MAIL;
       }
 
       $stmt->close();
-
-      // echo $conn->affected_rows;
-
       $conn->close();
     }
   }else{

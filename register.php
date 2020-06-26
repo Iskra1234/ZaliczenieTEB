@@ -120,7 +120,7 @@ session_start();
         </a>
       </div>
 
-      <a href="login.php" class="text-center">Mam konto i chcę się zalogować</a>
+      <a href="index.php" class="text-center">Mam konto i chcę się zalogować</a>
     </div>
     <!-- /.form-box -->
   </div><!-- /.card -->

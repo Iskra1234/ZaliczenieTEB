@@ -36,22 +36,7 @@
         }else if($yesterday == $create_user1){
             return "wczoraj";
         }else{
-            return '2-30 dni';
+            return $date.' dni temu';
         }
       }
-
-      // if($y1 != $y2){
-      //   //return "Rok temu";
-      // }else{
-      //   $m = $m2 - $m1;
-      //   if($m != 0){
-      //     if($m==1){
-      //       //return "$m miesiąc";
-      //     }else if($m>1 && $m<5){
-      //       //return "$m miesiące";
-      //     }else{
-      //       //return "$m miesięcy";
-      //     }
-      //   }
-      // }
 ?>

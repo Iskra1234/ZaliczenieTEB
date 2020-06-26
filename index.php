@@ -2,7 +2,7 @@
 session_start();
 
 if (isset($_SESSION['logged']['email'])) {
-  header('location: ./scripts/login.php');
+  header('location: ./pages/scripts/login.php');
 }
 
 ?>
@@ -32,7 +32,7 @@ if (isset($_SESSION['logged']['email'])) {
 <div class="login-box">
   <div class="login-logo">
     <?php
-    if (isset($_GET['register']) || isset($_GET['logout'])) {
+    if (isset($_GET['register']) || isset($_GET['logout']) || isset($_GET['active'])) {
       echo <<<ERROR
         <div class="card bg-success">
           <div class="card-header cento">
@@ -41,13 +41,11 @@ if (isset($_SESSION['logged']['email'])) {
     ERROR;
 
             if (isset($_GET['register'])) {
-
               echo '<h3 class="card-title">Rejestracja przebiegła pomyślnie.<br> Sprawdź maila! </h3>';
-            }
-            else if($_GET['logout']){
-              echo '<h3 class="card-title">Wylogowano. Do zobaczenia w którtce!</h3>';
-            }else if($_GET['active']){
+            } else if(isset($_GET['active'])){
               echo '<h3 class="card-title">Konto zostało aktywowane! Zaloguj się :D</h3>';
+            } else if($_GET['logout']){
+              echo '<h3 class="card-title">Wylogowano. Do zobaczenia wktórtce!</h3>';
             }
 
       echo <<<ERROR
