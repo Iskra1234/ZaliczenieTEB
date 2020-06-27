@@ -112,53 +112,7 @@ if (!isset($_SESSION['logged']['email'])) {
               <span class="badge badge-danger navbar-badge">3</span>
             </a>
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-              <a href="#" class="dropdown-item">
-                <!-- Message Start -->
-                <div class="media">
-                  <img src="dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
-                  <div class="media-body">
-                    <h3 class="dropdown-item-title">
-                      Brad Diesel
-                      <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
-                    </h3>
-                    <p class="text-sm">Call me whenever you can...</p>
-                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                  </div>
-                </div>
-                <!-- Message End -->
-              </a>
-              <div class="dropdown-divider"></div>
-              <a href="#" class="dropdown-item">
-                <!-- Message Start -->
-                <div class="media">
-                  <img src="dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-                  <div class="media-body">
-                    <h3 class="dropdown-item-title">
-                      John Pierce
-                      <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
-                    </h3>
-                    <p class="text-sm">I got your message bro</p>
-                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                  </div>
-                </div>
-                <!-- Message End -->
-              </a>
-              <div class="dropdown-divider"></div>
-              <a href="#" class="dropdown-item">
-                <!-- Message Start -->
-                <div class="media">
-                  <img src="dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-                  <div class="media-body">
-                    <h3 class="dropdown-item-title">
-                      Nora Silvester
-                      <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
-                    </h3>
-                    <p class="text-sm">The subject goes here</p>
-                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                  </div>
-                </div>
-                <!-- Message End -->
-              </a>
+
               <div class="dropdown-divider"></div>
               <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
             </div>
@@ -255,7 +209,7 @@ if (!isset($_SESSION['logged']['email'])) {
                 <ul class="products-list product-list-in-card pl-2 pr-2">
                   <?php
                   require_once '../scripts/connect.php';
-            $sql ="SELECT * FROM `user` ORDER BY creationdate DESC limit 8";
+            $sql ="SELECT * FROM `user` ORDER BY creationdate DESC limit 4";
             $result = $conn->query($sql);
             while($user1 = $result->fetch_assoc()){
                     echo <<<USER
@@ -269,8 +223,6 @@ if (!isset($_SESSION['logged']['email'])) {
 
 USER;
 
-                    //obliczenie ile dni temu zostało dodane konto
-                    //wyszukujemy - dzisiaj, wczoraj, ile dni temu(do miesiaca), miesiac temu, r
                     require_once '../scripts/function.php';
 
                     $creationdate = $user1['creationdate'];
@@ -310,7 +262,7 @@ USER;
                 <ul class="products-list product-list-in-card pl-2 pr-2">
                   <?php
                   require_once '../scripts/connect.php';
-            $sql ="SELECT * FROM `user` ORDER BY last_login DESC limit 8";
+            $sql ="SELECT * FROM `user` ORDER BY last_login DESC limit 4";
             $result = $conn->query($sql);
             while($user1 = $result->fetch_assoc()){
                     echo <<<USER
@@ -324,8 +276,6 @@ USER;
 
 USER;
 
-                    //obliczenie ile dni temu zostało dodane konto
-                    //wyszukujemy - dzisiaj, wczoraj, ile dni temu(do miesiaca), miesiac temu, r
                     require_once '../scripts/function.php';
 
                     $last_login = $user1['last_login'];
@@ -679,11 +629,6 @@ DIV;
             }
 
           })
-
-
-
-  $.widget.bridge('uibutton', $.ui.button)
-
 });
 
 </script>
