@@ -172,7 +172,7 @@ if (!isset($_SESSION['logged']['email'])) {
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Kokpit</a></li>
+              <li class="breadcrumb-item"><a href="wybory-admin.php">Wybory</a></li>
               <li class="breadcrumb-item active">Główna</li>
             </ol>
           </div><!-- /.col -->
@@ -503,6 +503,95 @@ DIV;
             </div>
           </div>
         </div>
+
+
+
+        <div class="row">
+          <div class="col-6">
+          <!-- BAR CHART -->
+         <div class="card card-warning">
+             <div class="card-header">
+               <h3 class="card-title">Podział tegorocznie zarejestrowanych użytkowników ze względu na Miasto</h3>
+
+               <div class="card-tools">
+                 <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                 </button>
+                 <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
+               </div>
+             </div>
+             <div class="card-body">
+               <canvas id="barChart1" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+             </div>
+            </div>
+          <!-- /.card -->
+         </div>
+
+       <div class="col-6">
+      <!-- BAR CHART -->
+        <div class="card card-warning">
+         <div class="card-header">
+           <h3 class="card-title">Podział tegorocznie zarejestrowanych użytkowników ze względu na Kraj</h3>
+
+           <div class="card-tools">
+             <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+             </button>
+             <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
+           </div>
+         </div>
+         <div class="card-body">
+           <canvas id="barChart2" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+         </div>
+        </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-6">
+    <!-- PIE CHART -->
+    <div class="card card-warning">
+      <div class="card-header">
+        <h3 class="card-title">Podział tegorocznie zarejestrowanych użytkowników ze względu na Kraj</h3>
+
+        <div class="card-tools">
+          <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+          </button>
+          <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
+        </div>
+      </div>
+      <div class="card-body">
+        <canvas id="pieChart1" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+      </div>
+      <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+   </div>
+
+ <div class="col-6">
+<!-- PIE CHART -->
+<div class="card card-warning">
+  <div class="card-header">
+    <h3 class="card-title">Podział tegorocznie zarejestrowanych użytkowników ze względu na Miasto</h3>
+
+    <div class="card-tools">
+      <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+      </button>
+      <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
+    </div>
+  </div>
+  <div class="card-body">
+    <canvas id="pieChart2" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+  </div>
+  <!-- /.card-body -->
+</div>
+</div>
+</div>
+<div class="row">
+  <div class="col-6">
+  </div>
+
+<div class="col-6">
+</div>
+</div>
+
 </div>
     </section>
 
@@ -600,7 +689,7 @@ DIV;
 
 
     })
-    </script>
+</script>
     <script>
 
     $(document).ready(function () {
@@ -629,7 +718,185 @@ DIV;
             }
 
           })
+
+
+
 });
+
+</script>
+<script>
+  $(document).ready(function() {
+      showGraph();
+      showGraph1();
+  });
+
+  function showGraph() {
+    $.post("../scripts/data.php",
+      function (data){
+
+        var test = [];
+         var num = [];
+         console.log(data);
+           for (var i in data) {
+           test.push(data[i].test);
+            num.push(data[i].num);
+                   }
+        var areaChartData = {
+          labels  : test ,
+          datasets: [
+            {
+              label               : 'Digital Goods',
+              backgroundColor     : 'rgba(60,141,188,0.9)',
+              borderColor         : 'rgba(60,141,188,0.8)',
+              pointRadius          : false,
+              pointColor          : '#3b8bba',
+              pointStrokeColor    : 'rgba(60,141,188,1)',
+              pointHighlightFill  : '#fff',
+              pointHighlightStroke: 'rgba(60,141,188,1)',
+              data              : num
+            },
+
+
+          ]
+        }
+
+        var barChartCanvas = $('#barChart1').get(0).getContext('2d')
+        var barChartData = jQuery.extend(true, {}, areaChartData)
+
+
+        var barChartOptions = {
+          responsive              : true,
+          maintainAspectRatio     : false,
+          datasetFill             : false,
+          scales: {
+            yAxes:[{
+              ticks:{
+                min: 0
+              }
+            }]
+          }
+        }
+
+        var barChart = new Chart(barChartCanvas, {
+          type: 'bar',
+          data: barChartData,
+          options: barChartOptions,
+
+
+        })
+
+
+
+        var donutData        = {
+          labels: test,
+          datasets: [
+            {
+              data: num,
+              backgroundColor : ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de'],
+            }
+          ]
+        }
+        //-------------
+        //- PIE CHART -
+        //-------------
+        // Get context with jQuery - using jQuery's .get() method.
+        var pieChartCanvas = $('#pieChart2').get(0).getContext('2d')
+        var pieData        = donutData;
+        var pieOptions     = {
+          maintainAspectRatio : false,
+          responsive : true,
+        }
+        //Create pie or douhnut chart
+        // You can switch between pie and douhnut using the method below.
+        var pieChart = new Chart(pieChartCanvas, {
+          type: 'pie',
+          data: pieData,
+          options: pieOptions
+        })
+      })
+      }
+//End
+//BARCHARD2
+function showGraph1() {
+  $.post("../scripts/data2.php",
+    function (data){
+      var countryname = [];
+       var num = [];
+
+         for (var i in data) {
+         countryname.push(data[i].countryname);
+          num.push(data[i].num);
+                 }
+      var areaChartData = {
+        labels  : countryname ,
+        datasets: [
+          {
+            label               : 'Digital Goods',
+            backgroundColor     : 'rgba(60,141,188,0.9)',
+            borderColor         : 'rgba(60,141,188,0.8)',
+            pointRadius          : false,
+            pointColor          : '#3b8bba',
+            pointStrokeColor    : 'rgba(60,141,188,1)',
+            pointHighlightFill  : '#fff',
+            pointHighlightStroke: 'rgba(60,141,188,1)',
+            data              : num
+          },
+
+
+        ]
+      }
+
+      var barChartCanvas = $('#barChart2').get(0).getContext('2d')
+      var barChartData = jQuery.extend(true, {}, areaChartData)
+
+
+      var barChartOptions = {
+        responsive              : true,
+        maintainAspectRatio     : false,
+        datasetFill             : false,
+        scales: {
+          yAxes:[{
+            ticks:{
+              min: 0
+            }
+          }]
+        }
+      }
+
+      var barChart = new Chart(barChartCanvas, {
+        type: 'bar',
+        data: barChartData,
+        options: barChartOptions
+      })
+      var donutData        = {
+        labels:countryname,
+        datasets: [
+          {
+            data: num,
+            backgroundColor : ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de'],
+          }
+        ]
+      }
+      //-------------
+      //- PIE CHART -
+      //-------------
+      // Get context with jQuery - using jQuery's .get() method.
+      var pieChartCanvas = $('#pieChart1').get(0).getContext('2d')
+      var pieData        = donutData;
+      var pieOptions     = {
+        maintainAspectRatio : false,
+        responsive : true,
+      }
+      //Create pie or douhnut chart
+      // You can switch between pie and douhnut using the method below.
+      var pieChart = new Chart(pieChartCanvas, {
+        type: 'pie',
+        data: pieData,
+        options: pieOptions
+      })
+      })
+  }
+
 
 </script>
 </body>
