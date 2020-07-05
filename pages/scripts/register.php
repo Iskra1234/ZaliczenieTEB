@@ -26,29 +26,33 @@
       $email1 = $_POST['email1'];
       $password1 = $_POST['password1'];
 
+
+
+
       $permission = 3;
       $avatar = "avatar.jpg";
 
       $password = password_hash($password1, PASSWORD_ARGON2ID);
 
 
-      $sql = "INSERT INTO `user`(`permissionid`, `name`, `surname`, `email`, `password`, `avatar`) VALUES (?, ?, ?, ?, ?, ?)";
+      $sql = "INSERT INTO `user`(`permissionid`, `name`, `surname`, `email`, `password`, `avatar`) VALUES (?, ?, ?, ?, ?, ? )";
       $stmt = $conn->prepare($sql);
       $stmt->bind_param("ssssss", $permission, $name, $surname, $email1, $password, $avatar);
 
       if ($stmt->execute()) {
-        $hash = hash('md5', $email1);
-
-        $MAIL = <<<MAIL
-        Dzień Dobry! $name $surname, oto informacje o Twoim koncie!
-
-        Login: $email1
-        Hasło: {$_POST['password1']}
-
-        Aktywuj swoje konto klikając w poniższy link:
-        http://localhost/adminlte/pages/scripts/activate.php?aid={$email1}&hash={$hash}
-MAIL;
-        mail($email1, 'Hello There!', $MAIL, 'From: inga.cerba@gmail.com');
+//         $hash = hash('md5', $email1);
+//
+//         $MAIL = <<<MAIL
+//         Dzień Dobry! $name $surname, oto informacje o Twoim koncie!
+//
+//         Login: $email1
+//         Hasło: {$_POST['password1']}
+//
+//         Aktywuj swoje konto klikając w poniższy link:
+//         http://localhost/adminlte/pages/scripts/activate.php?aid={$email1}&hash={$hash}
+//
+// MAIL;
+//         mail($email1, 'Hello There!', $MAIL, 'From: inga.cerba@gmail.com');
         header("location: ../../index.php?register=success");
         exit();
       }else{
